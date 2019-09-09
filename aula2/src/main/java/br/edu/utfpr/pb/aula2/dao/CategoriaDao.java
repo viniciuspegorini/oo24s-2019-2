@@ -1,18 +1,25 @@
 package br.edu.utfpr.pb.aula2.dao;
 
 import br.edu.utfpr.pb.aula2.model.Categoria;
-import br.edu.utfpr.pb.aula2.util.EntityManagerUtil;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 
-public class CategoriaDao {
+public class CategoriaDao extends GenericDao<Categoria, Integer> {
 
-    @PersistenceContext(unitName = "aula2-PU")
+    public CategoriaDao() {
+        super(Categoria.class);
+    }
+
+    // Select * from Categoria Where descricao like '%cat%'
+    public List<Categoria> findByDescricaoLike(String descricao) {
+        Query query = em.createQuery("Select c From Categoria c "
+                + "Where c.descricao LIKE :descricao");
+        query.setParameter("descricao", "%" + descricao + "%");
+
+        return query.getResultList();
+    }
+}
+/*    @PersistenceContext(unitName = "aula2-PU")
     private EntityManager em;
 
     public CategoriaDao() {
@@ -67,7 +74,4 @@ public class CategoriaDao {
         
         return query.getResultList();
     }
-}
-
-
-
+} */
