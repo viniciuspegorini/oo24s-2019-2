@@ -63,7 +63,7 @@ public class ProdutoDao {
         Query query = em.createQuery("Select p From Produto p "
                               + "Where p.categoria.descricao LIKE :descricao");
         query.setParameter("descricao", "%" + descricao + "%");
-         
+        
         return query.getResultList();
     }
 }
