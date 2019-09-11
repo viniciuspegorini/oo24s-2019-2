@@ -1,6 +1,5 @@
 package br.edu.utfpr.pb.aula2.dao;
 
-import br.edu.utfpr.pb.aula2.model.Usuario;
 import br.edu.utfpr.pb.aula2.util.EntityManagerUtil;
 import java.io.Serializable;
 import java.util.List;
