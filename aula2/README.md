@@ -166,7 +166,7 @@ public class EntityManagerUtil {
 ```
 O próximo passo é criar as classes responsáveis por utilizar o EntityManager para persistência dos dados. Essas classes estão no pacote **dao**. A primeira classe criada sera a **CategoriaDao**, na qual estão os métodos para persistencia dos dados da entidade **Categoria**.
 
-```java class:"lineNo"
+```java
 package br.edu.utfpr.pb.aula2.dao;
 import br.edu.utfpr.pb.aula2.model.Categoria;
 import br.edu.utfpr.pb.aula2.util.EntityManagerUtil;
@@ -222,3 +222,7 @@ public class CategoriaDao {
     }
 }
 ```
+
+No método construtor *CategoriaDao(*) o atributo *em* recebe uma instância do EntityManagerUtil. O método *insert()* recebe como entrada uma Categoria, então é iniciada uma transação. Após criar uma transação a categoria 
+é adicionada no *persistence context*. Nesse momento o Hibernate sabe que o objeto será armazenado no banco, mas a chamada ao banco não ocorreu ainda. Somente com o commit da transação que o Hibernate verifica o *persistence context* e executa o comando SQL de INSERT. Os demais métodos de necessitam de atualização no banco de dados (*update* e *delete*) seguem o mesmo padrão, inicia-se uma transação, passa para o *persistence context* e, por fim, é realizado o *commit* no banco de dados.
+Na classe CategoriaDao também foram implementados os métodos getById() que retorna uma Categoria de acordo com o **ID** e o getAll() que retorna uma lista de Categorias. Como são consultas de leitura de dados, não  foi necessário iniciar e realizar o *commit* da transação.
