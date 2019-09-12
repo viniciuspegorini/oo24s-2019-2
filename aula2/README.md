@@ -1,4 +1,3 @@
-<script src="https://gist.github.com/nisrulz/11c0d63428b108f10c83.js"></script>
 # Aula2 - oo24s
 ## Introdução ao Mapeamento Objeto Relacional em Java
 
@@ -167,7 +166,7 @@ public class EntityManagerUtil {
 ```
 O próximo passo é criar as classes responsáveis por utilizar o EntityManager para persistência dos dados. Essas classes estão no pacote **dao**. A primeira classe criada sera a **CategoriaDao**, na qual estão os métodos para persistencia dos dados da entidade **Categoria**.
 
-```java
+```java class:"lineNo"
 package br.edu.utfpr.pb.aula2.dao;
 import br.edu.utfpr.pb.aula2.model.Categoria;
 import br.edu.utfpr.pb.aula2.util.EntityManagerUtil;
