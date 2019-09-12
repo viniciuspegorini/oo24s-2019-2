@@ -1,3 +1,4 @@
+<script src="https://gist.github.com/nisrulz/11c0d63428b108f10c83.js"></script>
 # Aula2 - oo24s
 ## Introdução ao Mapeamento Objeto Relacional em Java
 
@@ -64,7 +65,7 @@ A propriedade *"hibernate.hbm2ddl.auto"* define a estratédia utilizada na cria�
 #### Organização do Projeto
 Os pacotes de código fonte do projeto são o **model, dao, util e main**. No pacote **model** estão as classes *Categoria* e *Produto*. No pacote **dao** estão as classes responsáveis pela persistência dos objetos de Categoria e Produto. No pacote **util** está a classe com a criação do EntityManagerFactory. E no pacote **main** está a classe para testar as operações de CRUD.
 
-#### Mapeamento Objeto Relacional das Classes do pacote Model
+### Mapeamento Objeto Relacional das Classes do pacote Model
 No pacote **model** estão as classes Categoria e Produto. Inicialmente será realizado o Mapeamento Objeto Relacional (ORM) da classe Categoria. 
 
 O mapeamento inicia pela *annotation* **_@Entity_**, toda entidade que será persistida necessita dessa anotação. A segunda anotação presente na classe é **_@Table_**, na qual foi informado o nome da tabela que será utilizada na persistência no banco de dados*.
@@ -144,3 +145,81 @@ public class Produto {
 ```
 > @ManyToOne - indica que existe uma associação entre Produto e Categoria. 
 > @JoinColumn - essa anotação é utilizada para definir o nome da coluna que possui a chave-estrangeira requerida pela associação (definida na propriedade ***name***). Caso essa anotação não seja adicionada, será utilizado o nome do campo.
+
+### Persistindo os dados no banco
+Após realizar o mapeamento ORM é necessário criar as classes e métodos que serão utilizados para realizar as operações de *Create Read, Update e Delete* (CRUD).
+No pacote **util** está a classe EntityManagerUtil, que será utilizada para instanciar o EntityManager, o qual permite iniciar uma nova sessão com o banco de dados. O EntityManager será o contexto utilizado para todas as operações com o banco de dados.
+```java
+package br.edu.utfpr.pb.aula2.util;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
+public class EntityManagerUtil {
+    private static EntityManagerFactory emf; 
+    public static EntityManager getEntityManager(){
+        if (emf == null) {
+            emf = Persistence.createEntityManagerFactory("aula2-PU");
+        }
+        return emf.createEntityManager();
+    }
+}
+```
+O próximo passo é criar as classes responsáveis por utilizar o EntityManager para persistência dos dados. Essas classes estão no pacote **dao**. A primeira classe criada sera a **CategoriaDao**, na qual estão os métodos para persistencia dos dados da entidade **Categoria**.
+
+```java
+package br.edu.utfpr.pb.aula2.dao;
+import br.edu.utfpr.pb.aula2.model.Categoria;
+import br.edu.utfpr.pb.aula2.util.EntityManagerUtil;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+
+public class CategoriaDao {
+    private EntityManager em;
+
+    public CategoriaDao() {
+        this.em = EntityManagerUtil.getEntityManager();
+    }
+
+    public void insert(Categoria categoria) {
+        EntityTransaction t = em.getTransaction();
+        t.begin();
+        em.persist(categoria);
+        em.flush();
+        t.commit();
+    }
+
+    public void update(Categoria categoria) {
+        EntityTransaction t = em.getTransaction();
+        t.begin();
+        em.merge(categoria);
+        em.flush();
+        t.commit();
+    }
+
+    public Categoria getById(Integer id) {
+        return em.find(Categoria.class, id);
+    }
+    
+    public List<Categoria> getAll() {
+        CriteriaBuilder builder = em.getCriteriaBuilder();
+        CriteriaQuery<Categoria> query = builder.createQuery(Categoria.class);
+        query.from(Categoria.class);
+        return em.createQuery(query).getResultList();
+    }
+       
+    public void delete(Integer id) {
+        Categoria c = getById(id);
+        EntityTransaction t = em.getTransaction();
+        t.begin();
+        em.merge(c);
+        em.remove(c);
+        em.flush();
+        t.commit();
+    }
+}
+```

@@ -11,8 +11,6 @@ import javax.persistence.criteria.CriteriaQuery;
 
 public abstract class GenericDao <T, ID extends Serializable> {
 
-
-    @PersistenceContext(unitName = "aula2-PU")
     protected EntityManager em;
     
     private Class<T> persistedClass;

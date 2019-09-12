@@ -1,19 +1,24 @@
 package br.edu.utfpr.pb.aula2.dao;
 
 import br.edu.utfpr.pb.aula2.model.Produto;
-import br.edu.utfpr.pb.aula2.util.EntityManagerUtil;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
+public class ProdutoDao extends GenericDao<Produto, Long> {
 
-public class ProdutoDao {
-
-    @PersistenceContext(unitName = "aula2-PU")
+    public ProdutoDao() {
+        super(Produto.class);
+    }
+    
+     public List<Produto> findByCategoriaDescricaoLike(String descricao) {
+        Query query = em.createQuery("Select p From Produto p "
+                              + "Where p.categoria.descricao LIKE :descricao");
+        query.setParameter("descricao", "%" + descricao + "%");
+        
+        return query.getResultList();
+    }
+}
+/*
     private EntityManager em;
     
     public ProdutoDao() {
@@ -66,11 +71,4 @@ public class ProdutoDao {
         
         return query.getResultList();
     }
-}
-
-
-
-
-
-
-
+} */
