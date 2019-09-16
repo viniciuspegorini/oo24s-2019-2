@@ -1,13 +1,19 @@
 package br.edu.utfpr.pb.aula2.main;
 
 import br.edu.utfpr.pb.aula2.dao.CategoriaDao;
+import br.edu.utfpr.pb.aula2.dao.ClienteDao;
 import br.edu.utfpr.pb.aula2.dao.PermissaoDao;
 import br.edu.utfpr.pb.aula2.dao.ProdutoDao;
 import br.edu.utfpr.pb.aula2.dao.UsuarioDao;
+import br.edu.utfpr.pb.aula2.dao.VendaDao;
+import br.edu.utfpr.pb.aula2.dao.VendaProdutoDao;
 import br.edu.utfpr.pb.aula2.model.Categoria;
+import br.edu.utfpr.pb.aula2.model.Cliente;
 import br.edu.utfpr.pb.aula2.model.Permissao;
 import br.edu.utfpr.pb.aula2.model.Produto;
 import br.edu.utfpr.pb.aula2.model.Usuario;
+import br.edu.utfpr.pb.aula2.model.Venda;
+import br.edu.utfpr.pb.aula2.model.VendaProduto;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
@@ -32,6 +38,18 @@ public class Main {
 
         System.out.println("***** Método inserirUsuario() *****");
         inserirUsuario();
+        
+        System.out.println("***** Método inserirCliente() *****");
+        inserirCliente();
+        
+        System.out.println("***** Método inserirVenda() *****");
+        inserirVenda();
+        
+        System.out.println("***** Método inserirVenda2() - OneToMany *****");
+        inserirVenda2();
+        
+        System.out.println("***** Método listarVendas() *****");
+        listarVendas();
     }
 
     private void inserirCategoria() {
@@ -59,12 +77,22 @@ public class Main {
         CategoriaDao categoriaDao = new CategoriaDao();
         //Categoria categoria = categoriaDao.getById( 1 );
         //produto.setCategoria( categoria );
-
         produto.setCategoria(categoriaDao.getById(1));
+        
+        // INSERT SEGUNDO PRODUTO
+        Produto p2 = new Produto();
+        p2.setNome("Produto 2");
+        p2.setDescricao("Descrição do Produto 2...");
+        p2.setValor(999D);
+        p2.setCategoria( categoriaDao.getById(1) );
 
         try {
             produtoDao.insert(produto);
             System.out.println("Produto " + produto.getId()
+                    + " inserido com sucesso!");
+            // INSERT SEGUNDO PRODUTO
+            produtoDao.insert(p2);
+            System.out.println("Produto " + p2.getId()
                     + " inserido com sucesso!");
         } catch (Exception e) {
             e.printStackTrace();
@@ -162,6 +190,108 @@ public class Main {
             
             usuarioDao.update(u1);
  
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void inserirCliente() {
+        try {
+            ClienteDao clienteDao = new ClienteDao();
+            Cliente cliente = new Cliente();
+            
+            cliente.setNome("João das Neves");
+            cliente.setCpf("22233344422");
+            
+            clienteDao.insert(cliente);
+            System.out.println("Cliente " + cliente.getId() + " inserido com sucesso!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private void inserirVenda() {
+        try {
+            VendaDao vendaDao = new VendaDao();
+            ClienteDao clienteDao = new ClienteDao();
+            VendaProdutoDao vendaProdutoDao = new VendaProdutoDao();
+            ProdutoDao produtoDao = new ProdutoDao();
+            
+            
+            Venda venda = new Venda();
+            venda.setData(LocalDate.now());
+            venda.setCliente( clienteDao.getById(1L) );
+            
+            vendaDao.insert(venda);
+            
+            VendaProduto vendaProduto = new VendaProduto();
+            vendaProduto.setProduto( produtoDao.getById(1L) );
+            vendaProduto.setVenda(venda);
+            vendaProduto.setQuantidade(2);
+            vendaProduto.setValor( produtoDao.getById(1L).getValor() );
+            
+            vendaProdutoDao.insert(vendaProduto);
+            
+            System.out.println("Venda " + venda.getId() + " salva com sucesso!");
+            System.out.println("VendaProduto " + vendaProduto.getId() + " salva com sucesso!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void inserirVenda2() {
+        try {
+            VendaDao vendaDao = new VendaDao();
+            ClienteDao clienteDao = new ClienteDao();
+            ProdutoDao produtoDao = new ProdutoDao();
+            
+            Venda venda = new Venda();
+            venda.setData( LocalDate.now() );
+            venda.setCliente( clienteDao.getById(1L) );
+            
+            venda.setVendaProdutos( new ArrayList<>() );
+            
+            //VENDA do PRODUTO cód= 1
+            VendaProduto vp1 = new VendaProduto();
+            vp1.setProduto( produtoDao.getById(1L) );
+            vp1.setVenda( venda );
+            vp1.setQuantidade( 4 );
+            vp1.setValor( produtoDao.getById(1L).getValor() );
+
+            venda.getVendaProdutos().add(vp1);
+            
+            //VENDA do PRODUTO cód= 2
+            VendaProduto vp2 = new VendaProduto();
+            vp2.setProduto( produtoDao.getById(2L) );
+            vp2.setVenda( venda );
+            vp2.setQuantidade( 3 );
+            vp2.setValor( produtoDao.getById(2L).getValor() );
+            
+            venda.getVendaProdutos().add(vp2);
+            
+            
+            vendaDao.insert(venda);
+            System.out.println("Venda " + venda.getId() + " inserida com suceso!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void listarVendas() {
+        try {
+            VendaDao vendaDao = new VendaDao();
+            
+            vendaDao.getAll().forEach( v -> {
+                System.out.println("\n\nVenda: " + v.getId() 
+                                 + " - Cliente: " + v.getCliente().getNome() 
+                                 + " - Data: " + v.getData() );
+                System.out.println("Produto | Qtde | Valor");
+                v.getVendaProdutos().forEach( vp -> 
+                        System.out.println(vp.getProduto().getNome() + " | " + 
+                                           vp.getQuantidade() + " | " + 
+                                            vp.getValor() )
+                );
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
