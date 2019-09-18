@@ -2,6 +2,7 @@ package br.edu.utfpr.pb.aula2.main;
 
 import br.edu.utfpr.pb.aula2.dao.CategoriaDao;
 import br.edu.utfpr.pb.aula2.dao.ClienteDao;
+import br.edu.utfpr.pb.aula2.dao.CompraDao;
 import br.edu.utfpr.pb.aula2.dao.PermissaoDao;
 import br.edu.utfpr.pb.aula2.dao.ProdutoDao;
 import br.edu.utfpr.pb.aula2.dao.UsuarioDao;
@@ -9,6 +10,12 @@ import br.edu.utfpr.pb.aula2.dao.VendaDao;
 import br.edu.utfpr.pb.aula2.dao.VendaProdutoDao;
 import br.edu.utfpr.pb.aula2.model.Categoria;
 import br.edu.utfpr.pb.aula2.model.Cliente;
+import br.edu.utfpr.pb.aula2.model.Compra;
+import br.edu.utfpr.pb.aula2.model.CompraProduto;
+import br.edu.utfpr.pb.aula2.model.CompraProdutoPK;
+import br.edu.utfpr.pb.aula2.model.Contato;
+import br.edu.utfpr.pb.aula2.model.EOperadora;
+import br.edu.utfpr.pb.aula2.model.ETipoContato;
 import br.edu.utfpr.pb.aula2.model.Permissao;
 import br.edu.utfpr.pb.aula2.model.Produto;
 import br.edu.utfpr.pb.aula2.model.Usuario;
@@ -43,13 +50,19 @@ public class Main {
         inserirCliente();
         
         System.out.println("***** Método inserirVenda() *****");
-        inserirVenda();
+        //inserirVenda();
         
         System.out.println("***** Método inserirVenda2() - OneToMany *****");
-        inserirVenda2();
+        //inserirVenda2();
         
         System.out.println("***** Método listarVendas() *****");
-        listarVendas();
+        //listarVendas();
+        
+        System.out.println("***** Método Compra() - OneToMany *****");
+        inserirCompra();
+        
+        System.out.println("***** Método inserirClienteContato() - OneToMany *****");
+        inserirClienteContato();
     }
 
     private void inserirCategoria() {
@@ -292,6 +305,63 @@ public class Main {
                                             vp.getValor() )
                 );
             });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void inserirCompra() {
+        try {
+            CompraDao compraDao = new CompraDao();
+            ProdutoDao produtoDao = new ProdutoDao();
+            
+            Compra compra = new Compra();
+            
+            compra.setDate( LocalDate.now() );
+            
+            compra.setCompraProdutos( new ArrayList<>() );
+            
+            CompraProduto cp1 = new CompraProduto();
+            cp1.setQuantidade(2);
+            cp1.setValor( produtoDao.getById(1L).getValor() );
+            cp1.setId( new CompraProdutoPK(compra, produtoDao.getById(1L)) );
+            
+            compra.getCompraProdutos().add(cp1);
+            
+            
+            CompraProduto cp2 = new CompraProduto();
+            cp2.setQuantidade(3);
+            cp2.setValor( produtoDao.getById(2L).getValor() );
+            cp2.setId( new CompraProdutoPK(compra, produtoDao.getById(2L)) );
+            
+            compra.getCompraProdutos().add(cp2);
+            
+            compraDao.insert(compra);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void inserirClienteContato() {
+        try {
+            ClienteDao clienteDao = new ClienteDao();
+            
+            Cliente cliente = new Cliente();
+            cliente.setNome("Cliente teste");
+            cliente.setCpf("22233344455");
+            
+            cliente.setContatos( new ArrayList<>() );
+            
+            Contato c1 = new Contato();
+            c1.setCliente(cliente);
+            c1.setTelefone("46 3333 2222");
+            c1.setOperadora( EOperadora.OI );
+            c1.setTipoContato( ETipoContato.COMERCIAL );
+            
+            cliente.getContatos().add( c1 );
+            
+            clienteDao.insert( cliente );
+            
         } catch (Exception e) {
             e.printStackTrace();
         }

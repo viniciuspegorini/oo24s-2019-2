@@ -1,5 +1,6 @@
 package br.edu.utfpr.pb.aula2.model;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -12,22 +13,20 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Cliente {
+public class Compra {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(length = 254, nullable = false)
-    private String nome;
+    @Column(nullable = false)
+    private LocalDate date;
     
-    @Column(length = 11, nullable = false)
-    private String cpf;
-    
-    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
-    private List<Contato> contatos;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER,
+            mappedBy = "id.compra")
+    private List<CompraProduto> compraProdutos;
 
-    public Cliente() {
+    public Compra() {
     }
 
     public Long getId() {
@@ -38,34 +37,26 @@ public class Cliente {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
-    public String getCpf() {
-        return cpf;
+    public List<CompraProduto> getCompraProdutos() {
+        return compraProdutos;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+    public void setCompraProdutos(List<CompraProduto> compraProdutos) {
+        this.compraProdutos = compraProdutos;
     }
 
-    public List<Contato> getContatos() {
-        return contatos;
-    }
-
-    public void setContatos(List<Contato> contatos) {
-        this.contatos = contatos;
-    }
-    
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 47 * hash + Objects.hashCode(this.id);
+        hash = 59 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -80,12 +71,12 @@ public class Cliente {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Cliente other = (Cliente) obj;
+        final Compra other = (Compra) obj;
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return true;
     }
-
+    
     
 }
