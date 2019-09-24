@@ -4,6 +4,7 @@ import br.edu.utfpr.pb.aula2.dao.CategoriaDao;
 import br.edu.utfpr.pb.aula2.dao.ClienteDao;
 import br.edu.utfpr.pb.aula2.dao.CompraDao;
 import br.edu.utfpr.pb.aula2.dao.PermissaoDao;
+import br.edu.utfpr.pb.aula2.dao.PessoaDao;
 import br.edu.utfpr.pb.aula2.dao.ProdutoDao;
 import br.edu.utfpr.pb.aula2.dao.UsuarioDao;
 import br.edu.utfpr.pb.aula2.dao.VendaDao;
@@ -17,6 +18,8 @@ import br.edu.utfpr.pb.aula2.model.Contato;
 import br.edu.utfpr.pb.aula2.model.EOperadora;
 import br.edu.utfpr.pb.aula2.model.ETipoContato;
 import br.edu.utfpr.pb.aula2.model.Permissao;
+import br.edu.utfpr.pb.aula2.model.PessoaF;
+import br.edu.utfpr.pb.aula2.model.PessoaJ;
 import br.edu.utfpr.pb.aula2.model.Produto;
 import br.edu.utfpr.pb.aula2.model.Usuario;
 import br.edu.utfpr.pb.aula2.model.Venda;
@@ -63,6 +66,12 @@ public class Main {
         
         System.out.println("***** Método inserirClienteContato() - OneToMany *****");
         inserirClienteContato();
+        
+        System.out.println("***** Método inserirPessoa() *****");
+        inserirPessoas();
+        
+        System.out.println("***** Método testarValidator() *****");
+        testarValidator();
     }
 
     private void inserirCategoria() {
@@ -361,6 +370,55 @@ public class Main {
             cliente.getContatos().add( c1 );
             
             clienteDao.insert( cliente );
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void inserirPessoas() {
+        try {
+            PessoaDao pessoaDao = new PessoaDao();
+            
+            //Inserir Pessoa Física
+            PessoaF pf = new PessoaF();
+            pf.setNome("Nome da Pessoa Física");
+            pf.setCpf("22233344477");
+            pf.setDataNascimento(LocalDate.now());
+            
+            pessoaDao.insert(pf);
+            
+            System.out.println("PessoaF " + pf.getId() + " inserida com sucesso!");
+            
+            
+            //Inserir Pessoa Jurídica
+            PessoaJ pj = new PessoaJ();
+            pj.setNome("Nome da Pessoa Juridica");
+            pj.setRazaoSocial("Pj S/A.");
+            pj.setInscricaoEstadual("12312312321awrvc");
+            pj.setCnpj("12345678910213");
+            
+            pessoaDao.insert(pj);
+            System.out.println("PessoaJ " + pj.getId() + " inserida com sucesso!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void testarValidator() {
+    
+        try {
+            ProdutoDao produtoDao = new ProdutoDao();
+            CategoriaDao categoriaDao = new CategoriaDao();
+            
+            Produto produto = new Produto();
+            produto.setValor(100000D);
+            if (produtoDao.isValid(produto)) {
+                produtoDao.insert(produto);
+            } else {
+                System.out.println("*************** ERRO");
+                System.out.println(produtoDao.getErrors(produto));
+            }
             
         } catch (Exception e) {
             e.printStackTrace();

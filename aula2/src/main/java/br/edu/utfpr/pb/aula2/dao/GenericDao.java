@@ -3,11 +3,14 @@ package br.edu.utfpr.pb.aula2.dao;
 import br.edu.utfpr.pb.aula2.util.EntityManagerUtil;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
 
 public abstract class GenericDao <T, ID extends Serializable> {
 
@@ -57,5 +60,25 @@ public abstract class GenericDao <T, ID extends Serializable> {
         em.remove(entity);
         em.flush();
         t.commit();
+    }
+    
+    public boolean isValid(T entity) {
+        final Validator validator = Validation.buildDefaultValidatorFactory()
+                                              .getValidator();
+        return validator.validate(entity).isEmpty();
+    }
+    
+    public String getErrors(T entity) {
+        final Validator validator = Validation.buildDefaultValidatorFactory()
+                                              .getValidator();
+        final Set<ConstraintViolation<T>> violations = validator.validate(entity);
+        
+        String errors = "";
+        if (!violations.isEmpty()) {
+            errors = violations.stream().map(
+                    violation -> violation.getMessage() + "\n")
+                    .reduce(errors, String::concat);
+        }
+        return errors;
     }
 }

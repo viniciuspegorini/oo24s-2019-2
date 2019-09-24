@@ -8,6 +8,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "produto")
@@ -17,15 +21,21 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @NotEmpty(message = "O campo 'nome' é obrigatório.")
     @Column(name = "nome", length = 254, nullable = false)
     private String nome;
     
+    @NotNull(message = "O campo 'valor' é obrigatório.")
+    @Min(value = 1, message = "O 'valor' mínimo é 1.00")
+    @Max(value = 9999, message = "O 'valor' máximo é 9999.00")
     @Column(name = "valor",nullable = false)
     private Double valor;
     
+    @NotEmpty(message = "O campo 'descricao' é obrigatório.")
     @Column(name = "descricao", length = 1024, nullable = false)
     private String descricao;
     
+    @NotNull(message = "O campo 'categoria' é obrigatório.")
     @ManyToOne
     @JoinColumn(name = "categoria_id", referencedColumnName = "id")
     private Categoria categoria;
