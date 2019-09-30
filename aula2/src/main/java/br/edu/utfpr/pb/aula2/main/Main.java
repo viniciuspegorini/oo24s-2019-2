@@ -212,6 +212,7 @@ public class Main {
             
             usuarioDao.update(u1);
  
+            usuarioDao.findByPermissaoNome("P_ADMIN").forEach( u -> System.out.println(u) );
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -132,5 +132,9 @@ public class Usuario {
         return true;
     }
 
-    
+    @Override
+    public String toString() {
+        return "Usuario{" + "id=" + id + ", nome=" + nome + ", email=" + email + ", senha=" + senha + ", ativo=" + ativo + ", dataNascimento=" + dataNascimento + '}';
+    }
+
 }
