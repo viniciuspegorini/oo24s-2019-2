@@ -5,7 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "categoria")
@@ -18,7 +20,7 @@ public class Categoria {
     
     @Column(name = "descricao", length = 100, nullable = false)
     private String descricao;
-
+    
     public Categoria() {
     }
 
