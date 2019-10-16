@@ -1,4 +1,4 @@
-package br.edu.utfpr.pb.oo24s.aula4.javafx;
+package br.edu.utfpr.pb.oo24s.aula4.main;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
