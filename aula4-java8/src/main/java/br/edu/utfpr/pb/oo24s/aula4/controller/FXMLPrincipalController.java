@@ -41,7 +41,11 @@ public class FXMLPrincipalController implements Initializable {
                 loadCategoria();
             }
         );
-        
+        this.buttonProduto.setOnAction(
+                (t) -> { 
+                    loadProduto();
+                }
+        );
     }
 
     private void setDataPane(Node node) {
@@ -72,7 +76,20 @@ public class FXMLPrincipalController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle(" .: Aula 4 - JavaFX :. ");
             alert.setHeaderText("Atenção, ocorreu um erro!");
-            alert.setContentText("Falha ao abrir a tela de categorias");
+            alert.setContentText("Falha ao abrir a tela de categorias.");
+            alert.showAndWait();
+        }
+    }
+
+    private void loadProduto() {
+        try {
+            setDataPane( fadeAnimate("/fxml/FXMLProdutoLista.fxml") );
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle(" .: Aula 4 - JavaFX :. ");
+            alert.setHeaderText("Atenção, ocorreu um erro!");
+            alert.setContentText("Falha ao abrir a tela de produtos.");
             alert.showAndWait();
         }
     }
