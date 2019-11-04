@@ -48,6 +48,7 @@ public abstract class GenericDao <T, ID extends Serializable> {
     public List<T> getAll() {
         CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<T> query = builder.createQuery(persistedClass);
+        em.clear();
         query.from(persistedClass);
         return em.createQuery(query).getResultList();
     }

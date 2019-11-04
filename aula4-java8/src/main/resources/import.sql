@@ -1,7 +1,12 @@
 
 INSERT INTO categoria (descricao) VALUES ('Informatica');
-INSERT INTO categoria (descricao) VALUES ('Eletronico');
+INSERT INTO categoria (descricao) VALUES ('Eletronicos');
 INSERT INTO categoria (descricao) VALUES ('Telefonia');
+INSERT INTO categoria (descricao) VALUES ('UD');
+INSERT INTO categoria (descricao) VALUES ('Casa');
+INSERT INTO categoria (descricao) VALUES ('Jardim');
+INSERT INTO categoria (descricao) VALUES ('Brinquedos');
+INSERT INTO categoria (descricao) VALUES ('Jogos');
 INSERT INTO produto (nome, descricao, valor, categoria_id) VALUES ('Teclado Microsoft 3000', 'Teclado com tecnologia Wireless; ABNT2 ...', 199.49, 1);
 INSERT INTO produto (nome, descricao, valor, categoria_id) values ('Monitor 24pol. FHD Samsung', 'Monitor Full HD de 24pol. Taxa de atualização 144Hz...', 2099.00, 1);
 INSERT INTO produto (nome, descricao, valor, categoria_id) VALUES ('Smarpthone Samsung A9', 'Smartphone Samsung A9, Tela 2k 440ppi, 64GB ...', 199.49, 3);

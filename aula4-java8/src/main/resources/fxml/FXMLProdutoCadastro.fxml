@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="451.0" prefWidth="374.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="br.edu.utfpr.pb.oo24s.aula4.controller.FXMLProdutoCadastroController">
+    <stylesheets>
+        <URL value="@/styles/style.css" />
+    </stylesheets>
+   <children>
+      <Label layoutX="23.0" layoutY="30.0" text="Código" />
+      <Label layoutX="23.0" layoutY="92.0" text="Nome" />
+      <Label layoutX="27.0" layoutY="156.0" text="Valor" />
+      <Label layoutX="26.0" layoutY="219.0" text="Categoria" />
+      <Label layoutX="26.0" layoutY="279.0" text="Descricão" />
+      <TextField fx:id="textId" editable="false" layoutX="23.0" layoutY="47.0" prefHeight="25.0" prefWidth="325.0" />
+      <TextField fx:id="textNome" layoutX="23.0" layoutY="109.0" prefHeight="25.0" prefWidth="325.0" />
+      <TextField fx:id="textValor" layoutX="26.0" layoutY="173.0" prefHeight="25.0" prefWidth="325.0" />
+      <ComboBox fx:id="comboCategoria" layoutX="26.0" layoutY="236.0" prefHeight="25.0" prefWidth="325.0" />
+      <TextArea fx:id="textDescricao" layoutX="26.0" layoutY="300.0" prefHeight="66.0" prefWidth="325.0" />
+      <Button fx:id="buttonCancelar" layoutX="217.0" layoutY="403.0" mnemonicParsing="false" text="Cancelar" />
+      <Button fx:id="buttonSalvar" layoutX="286.0" layoutY="403.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="62.0" text="Salvar" />
+   </children>
+</AnchorPane>
